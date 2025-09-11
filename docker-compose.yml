@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  # フロントエンドサービス (Next.js)
+  frontend:
+    build:
+      context: ./ricehack
+      dockerfile: Dockerfile
+    container_name: nextjs-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ricehack:/app
+      - /app/node_modules
+
+    command: npm run dev
+
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5050/api
+
+  # バックエンドサービス (Flask)
+  backend:
+    build:
+      context: ./flask
+      dockerfile: Dockerfile
+    container_name: flask-backend
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./flask:/app
+    environment:
+      - DATABASE_URL=mysql+pymysql://user:password@db:3306/studydb
+    depends_on:
+      - db
+
+  # データベースサービス (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=studydb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+# Dockerボリュームを定義 (dbデータ用)
+volumes:
+  mysql_data:
