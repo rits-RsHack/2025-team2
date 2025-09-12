@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.services import posts as post_service
 
-posts_bp = Blueprint('posts', __name__, url_prefix='/api/posts')
+posts_bp = Blueprint('posts', __name__, url_prefix='/api')
 
 @posts_bp.route('/posts', methods=['POST'])
 

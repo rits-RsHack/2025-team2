@@ -14,7 +14,7 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    author = db.relationship('User', back_populates='posts')
+    author = db.relationship(User, back_populates='posts')
     
     def to_dict(self):
         return {
