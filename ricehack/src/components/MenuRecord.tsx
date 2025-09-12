@@ -6,7 +6,14 @@ import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 import { X } from "lucide-react"
 import StopWatch from "./Stopwatch";
+import { useState } from "react";
+import DateTimeSelector from "./DateTimeSelector";
 export default function MenuApp() {
+
+
+const [selectedDate, setSelectedDate ] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
+
   return (
     <div className="flex 
       flex-col top-0 left-0 right-0 min-h-screen 
@@ -61,7 +68,11 @@ export default function MenuApp() {
           <div className="flex flex-col space-y-2">
             <Label>Time</Label>
             <div className="flex items-center gap-x-4">
-              <StopWatch />
+              <DateTimeSelector
+                onDateChange={setSelectedDate}
+                onTimeChange={setSelectedTime}
+              />
+              <StopWatch selectedDate={selectedDate} selectedTime={selectedTime} />
             </div>
           </div>
 
@@ -69,9 +80,6 @@ export default function MenuApp() {
       </Card>
 
 
-      <nav className="flex items-center justify-center p-4 w-full max-w-lg mx-auto bg-white rounded-x-4 ">
-        hello
-      </nav>
     </div>
   )
 }
