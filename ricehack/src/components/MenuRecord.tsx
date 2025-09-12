@@ -15,30 +15,45 @@ export default function MenuApp() {
   const [selectedDate, setSelectedDate ] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState("");
   const [stopwatchvalue , setStopwatchvalue] = useState<string>("00:00:00");
-
+   // タイトルとコンテンツの値を管理する状態を追加
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
   const handleStopwatchValueChange = (value: string) => {
     setSelectedTime(value);
     setStopwatchvalue(value);
 
   }
 
+  const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault();
+
+  const formData = new FormData();
+  formData.append('title', title); // title の値
+  formData.append('content', content); // content の値
+  if ( selectedDate !== undefined ) {
+  formData.append('date', selectedDate.toISOString()); // Date オブジェクトは文字列に変換
+  } 
+  formData.append('time', stopwatchvalue); // time の値
+  
+  // ここで、動画ファイルを FormData に追加する
+  // ファイル入力欄の参照（ref）が必要になる
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    formData.append('timelapse', fileInput.files[0]);
+  }
+  
+  // 次のステップで、この formData を Flask に送る
+};
+
   return (
     <div className="flex 
       flex-col top-0 left-0 right-0 min-h-screen 
       bg-gray-200 font-sans">
-      <header className="flex fixed items-center justify-between top-0 left-0 right-0 z-10 bg-black text-white p-4  ">
-        <h1 className="
-        text-4xl font-bold tracking-tight
-        ">
-          Rice_Hack
-        </h1>
-        <div className="
-        w-12 h-12 bg-gray-300 rounded-full border-4 border-white
-        "/>
-      </header>
+      
       <Card className="mt-16 
         w-full max-w-screen-lg mx-auto bg-white rounded-b-xl shadow-b-xl shadow-lg p-6
         ">
+          <form onSubmit={handleSubmit}>
         <Card className="h-[1000px] p-6">
           <CardHeader className="flex justify-center relative">
             <div className="relative">
@@ -52,14 +67,14 @@ export default function MenuApp() {
           <div className="flex flex-col space-y-2">
             <Label>Title</Label>
             <div className="flex items-center gap-x-4">
-              <Input className=" flex-grow" placeholder="write your theme or learning language!" />
+              <Input className=" flex-grow" onChange={(e) => setTitle(e.target.value)} placeholder="write your theme or learning language!" />
             </div>
 
           </div>
           <div className="flex flex-col space-y-2">
             <Label>Content</Label>
             <div className="flex items-center gap-x-4">
-              <Textarea className=" flex-grow h-30" placeholder="what did you learn?" />
+              <Textarea className=" flex-grow h-30" onChange={(e) => setContent(e.target.value)} placeholder="what did you learn?" />
             </div>
 
           </div>
@@ -85,10 +100,13 @@ export default function MenuApp() {
             </div>
           </div>
 
+          <Button type="submit" className="mt-4 bg-blue-500 text-white hover:bg-blue-600">
+            Submit
+          </Button>
+
         </Card>
+        </form>
       </Card>
-
-
     </div>
   )
 }
