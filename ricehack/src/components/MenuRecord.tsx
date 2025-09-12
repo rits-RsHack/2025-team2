@@ -44,7 +44,7 @@ export default function MenuApp() {
   
   // 次のステップで、この formData を Flask に送る
   try {
-  const response = await fetch('http://localhost:5000/api/posts', {
+  const response = await fetch('http://localhost:5050/api/posts', {
     method: 'POST',
     body: formData,
   });
@@ -69,7 +69,7 @@ export default function MenuApp() {
         w-full max-w-screen-lg mx-auto bg-white rounded-b-xl shadow-b-xl shadow-lg p-6
         ">
           <form onSubmit={handleSubmit}>
-        <Card className="h-[1000px] p-6">
+        <Card className="h-[700px] p-6">
           <CardHeader className="flex justify-center relative">
             <div className="relative">
               <CardTitle className="text-xl font-bold text-center">PostMode</CardTitle>
