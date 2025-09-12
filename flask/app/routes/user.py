@@ -1,25 +1,54 @@
 from flask import Blueprint, request, jsonify
-from services.auth import UserService
-from services.database import Database
+from ..services.auth import UserService
+from ..models_and_db import SessionLocal
+from ..models.auth import User
 
+users_bp = Blueprint('users', __name__, url_prefix='/api/users')
 
-user = Blueprint('user', __name__)
-
-@user.route('/login', methods=['POST'])
-def login():
-    # フロントエンドから送信されたデータを取得
+@users_bp.route('/', methods=['POST'])
+def create_user():
     data = request.get_json()
-    username = data.get('username')
+    name = data.get('name')
+    mail = data.get('mail')
     password = data.get('password')
 
-    with Database.get_session() as session:
+    if not name or not mail or not password:
+        return jsonify({"error": "Name, mail, and password are required."}), 400
+
+    session = SessionLocal()
+    try:
         user_service = UserService(session)
-        user = user_service.get_user_by_username(username)
+        user = user_service.create_user(name, mail, password)
+        return jsonify(user.to_dict()), 201
+    except Exception as e:
+        session.rollback()
+        return jsonify({'message': f"Error creating user: {str(e)}"}), 500
+    finally:
+        session.close()
+
+@users_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    mail = data.get('mail')
+    password = data.get('password')
+
+    if not mail or not password:
+        return jsonify({"message": "メールアドレスとパスワードは必須です"}), 400
+
+    session = SessionLocal()
+    try:
+        user_service = UserService(session)
+        user = user_service.get_user_by_mail(mail)
 
         if user and user_service.check_user_password(user, password):
-            # ログイン成功
-            return jsonify({"message": "ログイン成功"}), 200
+            return jsonify({"message": "ログイン成功", "user_id": user.id}), 200
         else:
-            # ログイン失敗
-            return jsonify({"message": "無効なユーザー名またはパスワード"}), 401
+            return jsonify({"message": "無効なメールアドレスまたはパスワード"}), 401
+    finally:
+        session.close()
 
+User.to_dict = lambda self: {
+    'id': self.id,
+    'name': self.name,
+    'mail': self.mail,
+}

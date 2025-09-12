@@ -1,5 +1,6 @@
 from app import db
 from datetime import datetime
+from ..models.auth import User
 
 class Post(db.Model):
     

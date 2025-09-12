@@ -31,6 +31,14 @@ def get_post(post_id):
         return jsonify(post.to_dict()), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+@posts_bp.route('/posts', methods=['GET'])
+def get_all_posts():
+    try:
+        posts = post_service.get_all_posts()
+        return jsonify([post.to_dict() for post in posts]), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
     
     
     
