@@ -6,15 +6,14 @@ class UserService:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_user_by_mail(self, mail: str):
-        return self.session.query(User).filter_by(mail=mail).first()
+    def get_user_by_name(self, name: str):
+        return self.session.query(User).filter_by(name=name).first()
 
-    def create_user(self, name: str, mail: str, password: str):
+    def create_user(self, name: str, password: str):
         hashed_password = generate_password_hash(password)
         
         new_user = User(
             name=name, 
-            mail=mail, 
             password_hash=hashed_password
         )
         
