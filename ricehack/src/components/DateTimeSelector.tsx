@@ -10,16 +10,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Input } from "@/components/ui/input";
 import { Label } from "./ui/label";
 
-export default function DateTimeSelector({ onDateChange, onTimeChange }) {
-  const [date, setDate] = useState(null);
+interface DateTimeSelectorProps {
+  onDateChange: (date: Date | undefined) => void;
+  onTimeChange: (time: string) => void;
+  timeValue: string;
+}
+
+export default function DateTimeSelector({ onDateChange, onTimeChange, timeValue }: DateTimeSelectorProps) {
+  const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
 
-  const handleDateSelect = (selectedDate) => {
+  const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     onDateChange(selectedDate); // 親コンポーネントの状態を更新
   };
 
-  const handleTimeChange = (e) => {
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTime(e.target.value);
     onTimeChange(e.target.value); // 親コンポーネントの状態を更新
   };
@@ -28,7 +34,7 @@ export default function DateTimeSelector({ onDateChange, onTimeChange }) {
     <div className="flex space-x-4 items-end">
       {/* Date Picker */}
       <div className="flex flex-col space-y-2">
-        <Label>Date of birth</Label>
+        <Label>Date</Label>
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -47,7 +53,6 @@ export default function DateTimeSelector({ onDateChange, onTimeChange }) {
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
-              initialFocus
             />
           </PopoverContent>
         </Popover>
@@ -59,7 +64,7 @@ export default function DateTimeSelector({ onDateChange, onTimeChange }) {
         <Input
           type="time"
           step="1"
-          value={time}
+          value={timeValue}
           onChange={handleTimeChange}
           className="w-[120px]"
         />

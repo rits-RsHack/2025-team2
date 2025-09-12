@@ -6,11 +6,12 @@ import { Play, Pause, RotateCcw } from "lucide-react"
 import { useStopwatch } from "react-timer-hook";
 
 interface StopWatchProps {
-  selectedDate: Date | null;
+  selectedDate: Date | undefined;
   selectedTime: string;
+  onStop: (time: string) => void;
 }
 
-export default function StopWatch({ selectedDate, selectedTime }: StopWatchProps) {
+export default function StopWatch({ selectedDate, selectedTime, onStop }: StopWatchProps) {
   const {
     seconds,
     minutes,
@@ -23,12 +24,15 @@ export default function StopWatch({ selectedDate, selectedTime }: StopWatchProps
 
   // フォームで選択された日付と時間が変更されたら、タイマーをリセットする
   useEffect(() => {
-    // 日付と時間が有効な値であることを確認
-    if (selectedDate && selectedTime) {
-      reset(); // タイマーをリセットして00:00:00にする
-      pause(); // 念のためタイマーを停止状態にする
+    // isRunningがfalseになった（＝停止した）瞬間を検知
+    if (!isRunning) {
+      // 現在の時間をHH:MM:SS形式に変換
+      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+      // 親から渡されたonStop関数を呼び出し、現在の時間を渡す
+      onStop(formattedTime);
     }
-  }, [selectedDate, selectedTime]); // 依存配列にpropsを指定
+  }, [isRunning, hours, minutes, seconds, onStop]);
 
   return (
     <div className="flex space-x-3 items-center">
@@ -47,7 +51,9 @@ export default function StopWatch({ selectedDate, selectedTime }: StopWatchProps
             <Play />Start
           </Button>
         ) : (
-          <Button onClick={pause} className="hover:text-gray-500" >
+          <Button onClick={() => {
+            
+            pause()}} className="hover:text-gray-500" >
             <Pause />Stop
           </Button>
         )}

@@ -8,11 +8,19 @@ import { X } from "lucide-react"
 import StopWatch from "./Stopwatch";
 import { useState } from "react";
 import DateTimeSelector from "./DateTimeSelector";
+import { set } from "date-fns";
 export default function MenuApp() {
 
 
-const [selectedDate, setSelectedDate ] = useState(null);
+  const [selectedDate, setSelectedDate ] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState("");
+  const [stopwatchvalue , setStopwatchvalue] = useState<string>("00:00:00");
+
+  const handleStopwatchValueChange = (value: string) => {
+    setSelectedTime(value);
+    setStopwatchvalue(value);
+
+  }
 
   return (
     <div className="flex 
@@ -65,14 +73,15 @@ const [selectedDate, setSelectedDate ] = useState(null);
 
           </div>
 
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col  space-y-2">
             <Label>Time</Label>
             <div className="flex items-center gap-x-4">
               <DateTimeSelector
                 onDateChange={setSelectedDate}
                 onTimeChange={setSelectedTime}
+                timeValue={stopwatchvalue}
               />
-              <StopWatch selectedDate={selectedDate} selectedTime={selectedTime} />
+              <StopWatch selectedDate={selectedDate} selectedTime={selectedTime} onStop={handleStopwatchValueChange} />
             </div>
           </div>
 
