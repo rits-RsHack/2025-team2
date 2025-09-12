@@ -1,7 +1,7 @@
 from app import db
 from datetime import datetime
 
-class Post(db.model):
+class Post(db.Model):
     
     __tablename__ = 'posts'
     

@@ -1,6 +1,7 @@
 import os
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from flask_cors import CORS
 
 db = SQLAlchemy()
@@ -19,14 +20,14 @@ def create_app():
     db.init_app(app)
     
     # ブループリントの登録
-    from app.routes import test_bp
-    app.register_blueprint(test_bp)
+    from app.routes import posts_bp
+    app.register_blueprint(posts_bp)
     
     @app.route('/')
     def health_check():
         try:
             with db.engine.connect() as connection:
-                connection.execute('SELECT 1')
+                connection.execute(text('SELECT 1'))
             return jsonify({"status": "ok", "message": "Successfully connected to the database."}), 200
         except Exception as e:
             return jsonify({"status": "error", "message": f"Database connection or query failed: {str(e)}"}), 500
