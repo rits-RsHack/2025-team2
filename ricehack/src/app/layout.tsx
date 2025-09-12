@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Circle, Menu, User } from "lucide-react";
 import React from "react";
+import { AuthProvider } from "@/context/AuthContext";
 
 
 export const metadata: Metadata = {
@@ -50,6 +51,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <AuthProvider>
+        
         <header className="flex fixed items-center justify-between top-0 left-0 right-0 z-10 bg-black text-white p-4  ">
           <h1 className="
         text-4xl font-bold tracking-tight
@@ -83,6 +86,8 @@ export default function RootLayout({
         </nav>
 
         {children}
+        
+        </AuthProvider>
       </body>
     </html>
   );
