@@ -43,6 +43,21 @@ export default function MenuApp() {
   }
   
   // 次のステップで、この formData を Flask に送る
+  try {
+  const response = await fetch('http://localhost:5000/api/posts', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (response.ok) {
+    console.log('データが正常に送信されました！');
+    // フォームをリセットするなどの処理
+  } else {
+    console.error('データの送信に失敗しました。');
+  }
+} catch (error) {
+  console.error('ネットワークエラー:', error);
+}
 };
 
   return (
