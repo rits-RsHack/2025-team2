@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,14 +20,15 @@ export default function RegisterPage() {
     setLoading(true);
     setError(null);
 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050/api/users';
-      const response = await fetch(`${apiUrl}/auth/register`, {
+      const response = await fetch(`${API_URL}/users/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ name, mail, password }),
       });
 
       const data = await response.json();
@@ -62,8 +63,8 @@ export default function RegisterPage() {
               <Input
                 id="username"
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
@@ -72,8 +73,8 @@ export default function RegisterPage() {
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
                 required
               />
             </div>
