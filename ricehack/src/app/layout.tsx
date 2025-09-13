@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Circle, Menu, User } from "lucide-react";
 import React from "react";
 import { AuthProvider } from "@/context/AuthContext";
-import Link from "next/link";
 import Navigation from "@/components/Navigation";
 export const metadata: Metadata = {
   title: "Let's Time_Hack",
@@ -24,22 +20,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <AuthProvider>
-        
-        <header className="flex fixed items-center justify-between top-0 left-0 right-0 z-10 bg-black text-white p-4  ">
-          <h1 className="
+        <AuthProvider>
+
+          <header className="flex fixed items-center justify-between top-0 left-0 right-0 z-10 bg-black text-white p-4  ">
+            <h1 className="
         text-4xl font-bold tracking-tight
         ">
-            Time_Hack
-          </h1>
-          <div className="
+              ProShare
+            </h1>
+            <div className="
         w-12 h-12 bg-gray-300 rounded-full border-4 border-white
         "/>
-        </header>
-        
-        <Navigation />
-        {children}
-        
+          </header>
+
+          <Navigation />
+          {children}
+
         </AuthProvider>
       </body>
     </html>
