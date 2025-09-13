@@ -23,7 +23,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050/api/users/login';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050/api/user/login';
       const response = await fetch(`${apiUrl}`, {
         method: 'POST',
         headers: {
