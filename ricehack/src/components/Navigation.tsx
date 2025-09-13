@@ -24,13 +24,13 @@ const navigationItems: NavigationItem[] = [
   {
     icon: Circle,
     label: "Record",
-    active: true,
+    active: false,
     url: "/menu",
   },
   {
     icon: User,
     label: "Profile",
-    active: true,
+    active: false,
     url: "/profile",
   },
 ];
