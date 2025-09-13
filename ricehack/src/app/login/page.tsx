@@ -12,7 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -23,19 +23,20 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050/api/users/login';
-      const response = await fetch(`${apiUrl}`, {
+     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+      const response = await fetch(`${API_URL}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ name, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        login(data.token); // AuthContextのlogin関数を呼び出す
+        login(data.user_id);// AuthContextのlogin関数を呼び出す
         router.push('/'); // タイムラインページにリダイレクト
       } else {
         setError(data.error || 'ログインに失敗しました。');
@@ -64,8 +65,8 @@ export default function LoginPage() {
               <Input
                 id="username"
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
