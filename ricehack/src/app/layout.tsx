@@ -30,7 +30,7 @@ export default function RootLayout({
           <h1 className="
         text-4xl font-bold tracking-tight
         ">
-            Time_Hack
+            ProShare
           </h1>
           <div className="
         w-12 h-12 bg-gray-300 rounded-full border-4 border-white
